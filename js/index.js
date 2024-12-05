@@ -18,7 +18,6 @@ function init() {
       renderOptions();
       renderCards("全部");
       getCart();
-      swAlert('Welcome Back', 'error');
     })
     .catch((err) => console.log(err.message));
 }
@@ -134,19 +133,10 @@ function renderCart(cartObj) {
     removeAllItems();
     e.preventDefault();
   });
-  document.querySelectorAll(".productQuan").forEach((item) => {
-    item.addEventListener("change", (e) => {
-      const postData = {
-        productId: e.target.dataset.id,
-        quantity: e.target.value * 1,
-      };
-      console.log(postData);
-      addToCart(postData);
-    });
-  });
 }
 // 加入購物車
 function addToCart(data) {
+  data.quantity = carts.carts.some(item=>item.product.id===data.productId)?data.quantity+=1:1;
   let product = {
     data: { ...data },
   };
