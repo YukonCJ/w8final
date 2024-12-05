@@ -18,7 +18,7 @@ function init() {
       renderOptions();
       renderCards("全部");
       getCart();
-      swAlert();
+      swAlert('Welcome Back', 'error');
     })
     .catch((err) => console.log(err.message));
 }
@@ -91,7 +91,7 @@ function renderCart(cartObj) {
       cartText += `<tr>
           <td>
             <div class="cardItem-title">
-              <img src="https://i.imgur.com/HvT3zlU.png" alt="">
+              <img src="${item.product.images}" alt="">
               <p>${item.product.title}</p>
             </div>
           </td>
@@ -155,6 +155,7 @@ function addToCart(data) {
     .then((res) => {
       console.log(res.data);
       carts = res.data;
+      swAlert('已加入購物車', 'success');
       renderCart(carts);
     })
     .catch((err) => console.log(err.response.status));
@@ -165,6 +166,7 @@ function removeItem(id) {
     .delete(`${url}/carts/${id}`)
     .then((res) => {
       carts = res.data;
+      swAlert('已刪除商品', 'success');
       renderCart(carts);
     })
     .catch((err) => console.log(err.response.data));
@@ -175,6 +177,7 @@ function removeAllItems() {
     .delete(`${url}/carts`)
     .then((res) => {
       carts = res.data;
+      swAlert('已清空購物車', 'success');
       renderCart(carts);
     })
     .catch((err) => console.log(err.response.data));
@@ -196,17 +199,18 @@ function submitOrder() {
     .post(`${url}/orders`, order)
     .then((res) => {
       console.log(res.data);
+      renderCart([]);
       form.reset();
     })
     .catch((err) => console.log(err.response.status));
 }
 //
-function swAlert(text){
+function swAlert(text, icon){
   swal({
-    title: '成功加入購物車',
-    icon: 'success',
+    title: text,
+    icon: icon,
     buttons: {
-      OK:true
+      ok: true
     }
   })
 }
